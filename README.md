@@ -61,9 +61,9 @@ This example uses ...
 
 - Launch a shell within your virtual environment ...
 
-```sh
-poetry shell
-```
+    ```sh
+    poetry shell
+    ```
 
 - Launch `Django` ...
 
