@@ -12,6 +12,8 @@ This example uses ...
 
 ## Installation
 
+- [Clone this repository locally](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)[^GITHUB]
+
 - Install [`Python`](https://www.python.org/)[^PYTHON] & [`pipx`](https://github.com/pypa/pipx)[^PIPX] and thus [`poetry`](https://github.com/python-poetry/poetry)[^POETRY]
 
 - Install [`Postgres`](https://www.postgresql.org/)[^POSTGRES] and thus [`TimescaleDB`](https://www.timescale.com/)[^POSTGRES]
@@ -71,6 +73,16 @@ This example uses ...
 <summary>Footnotes</summary>
 
 [^DJANGO]: To display a web page it asks a database for the data it needs to render files that the browser interprets (HTML, CSS & JavaScript) so it can display a user interface
+
+[^GITHUB]:
+
+    I use [`git clone`](https://git-scm.com/) ...
+
+    ```sh
+    git clone git@github.com:rdmolony/rdmolony.github.io.git
+    ```
+
+    ... since I prefer to [authenticate with `GitHub` via `SSH`](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
 
 [^PIPX]: I use [`nix`](https://github.com/DeterminateSystems/nix-installer) ...
 
