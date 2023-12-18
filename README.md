@@ -59,11 +59,16 @@ This example uses ...
 
     > [**Create a new role with a password**](https://www.postgresql.org/docs/current/database-roles.html) if you go on to do something with this database
 
+- Launch a shell within your virtual environment ...
+
+```sh
+poetry shell
+```
 
 - Launch `Django` ...
 
     ```sh
-    poetry run python manage.py runserver
+    python manage.py runserver
     ```
 
 ---
@@ -75,6 +80,12 @@ This example uses ...
 
 ```sh
 pg_ctl start -D .db/
+```
+
+- Launch a shell within your virtual environment ...
+
+```sh
+poetry shell
 ```
 
 
