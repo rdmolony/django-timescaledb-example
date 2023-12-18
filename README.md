@@ -69,6 +69,18 @@ This example uses ...
 ---
 
 
+## How to ...
+
+- Launch the database server ...
+
+```sh
+pg_ctl start -D .db/
+```
+
+
+---
+
+
 <details>
 <summary>Footnotes</summary>
 
