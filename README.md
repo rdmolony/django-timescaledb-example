@@ -71,6 +71,13 @@ This example uses ...
     python manage.py runserver
     ```
 
+> [!NOTE]  
+> Go to [`http://localhost:8000`](http://localhost:8000) & you should see a running web application
+
+> [!TIP]
+> If you have any trouble getting setup,  feel free to ask a question at [django-timescaledb-example/discussions](https://github.com/rdmolony/django-timescaledb-example/discussions)
+
+
 ---
 
 
