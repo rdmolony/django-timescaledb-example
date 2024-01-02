@@ -30,6 +30,7 @@ This example uses ...
     cp .env.dist .env
     ```
 
+    > [!WARNING]  
     > **Create a complex secret key**[^SECRET_KEY] if you intend to adapt this project into a web application
 
 - Create a `TimescaleDB` database with user `django` via the `Postgres` CLI ...
@@ -57,6 +58,7 @@ This example uses ...
     psql -d db -c "CREATE EXTENSION timescaledb"
     ```
 
+    > [!WARNING]  
     > [**Create a new role with a password**](https://www.postgresql.org/docs/current/database-roles.html) if you go on to do something with this database
 
 
