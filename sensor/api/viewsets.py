@@ -4,7 +4,7 @@ from ..models import File
 from .serializers import FileSerializer
 
 
-class FileViewSet(viewsets.ReadOnlyModelViewSet):
+class FileViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list` and `retrieve` actions.
     """
