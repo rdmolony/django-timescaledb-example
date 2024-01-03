@@ -12,14 +12,4 @@ urlpatterns = [
     path('', lambda request: redirect('sensor:upload-file')),
 
     path('upload-file/', views.upload_file, name="upload-file"),
-    path(
-        'report-file-upload-success/',
-        views.report_file_upload_success,
-        name="report-file-upload-success"
-    ),
-    path(
-        'report-file-upload-failure/',
-        views.report_file_upload_failure,
-        name="report-file-upload-failure"
-    ),
 ]

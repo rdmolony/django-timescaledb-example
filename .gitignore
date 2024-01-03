@@ -19,3 +19,4 @@ tests/report/
 tests/screenshots/
 .env
 .db/
+media/

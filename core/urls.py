@@ -21,8 +21,8 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('', lambda request: redirect('sensor')),
-
     path('admin/', admin.site.urls),
     path('sensor/', include('sensor.urls')),
+
+    path('', lambda request: redirect('sensor/')),
 ]
