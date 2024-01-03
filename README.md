@@ -14,9 +14,11 @@ This example uses ...
 
 - [Clone this repository locally](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)[^GITHUB]
 
-- Install [`Python`](https://www.python.org/)[^PYTHON] & [`pipx`](https://github.com/pypa/pipx)[^PIPX] and thus [`poetry`](https://github.com/python-poetry/poetry)[^POETRY]
+- Install [`Python`](https://www.python.org/)[^PYTHON] & [`pipx`](https://github.com/pypa/pipx)[^PIPX] and thus [`poetry`](https://github.com/python-poetry/poetry)[^POETRY] & [`honcho`](https://github.com/nickstenning/honcho)[^HONCHO]
 
 - Install [`Postgres`](https://www.postgresql.org/)[^POSTGRES] and thus [`TimescaleDB`](https://www.timescale.com/)[^POSTGRES]
+
+- Install [`Redis`](https://redis.io/)[^REDIS]
 
 - Install this project's `Python` dependencies via ...
 
@@ -24,48 +26,23 @@ This example uses ...
     poetry install
     ```
 
-- Create a `.env` file from `.env.dist` ...
+- Create a `.env` file from `.env.dist` **to store credentials** ...
 
     ```sh
     cp .env.dist .env
     ```
 
 > [!WARNING]  
-> **Create a complex secret key**[^SECRET_KEY] if you intend to adapt this project into a web application
+> **Create a complex secret key**[^SECRET_KEY] if you intend to deploy this web application
 
 - Create a `TimescaleDB` database with user `django` via the `Postgres` CLI ...
 
     ```sh
-    # Initialise the database
-    pg_ctl init -D .db/
-
-    # Add TimescaleDB to preloaded libraries
-    echo "shared_preload_libraries = 'timescaledb'" >> ./.db/postgresql.conf 
-
-    # Launch the database server 
-    pg_ctl start -D .db/
-
-    # Create a database
-    createdb db
-
-    # Create role django with empty password
-    psql -d db -c "
-    CREATE USER django;
-    GRANT ALL PRIVILEGES ON DATABASE db to django;
-    "
-
-    # Install TimescaleDB
-    psql -d db -c "CREATE EXTENSION timescaledb"
+    sh shell/createdb.sh
     ```
 
 > [!WARNING]  
 > [**Create a new role with a password**](https://www.postgresql.org/docs/current/database-roles.html) if you go on to do something with this database
-
-
----
-
-
-## Run
 
 - Setup the database ...
 
@@ -73,7 +50,16 @@ This example uses ...
     poetry run python manage.py migrate
     ```
 
-- Launch `Django` ...
+> [!TIP]
+> If you have any trouble getting setup,  feel free to ask a question at [django-timescaledb-example/discussions](https://github.com/rdmolony/django-timescaledb-example/discussions)
+
+
+---
+
+
+## Run
+
+- Launch `Django`, `Redis` & `Celery` ...
 
     ```sh
     poetry run python manage.py runserver
@@ -82,9 +68,17 @@ This example uses ...
 > [!NOTE]  
 > Go to [`http://localhost:8000`](http://localhost:8000) & you should see a running web application
 
-> [!TIP]
-> If you have any trouble getting setup,  feel free to ask a question at [django-timescaledb-example/discussions](https://github.com/rdmolony/django-timescaledb-example/discussions)
+- Launch `Redis` ...
 
+    ```sh
+    celery -A core worker -l INFO
+    ```
+
+- Launch `Celery` ...
+
+    ```sh
+    celery -A core worker -l INFO
+    ```
 
 ---
 
@@ -97,7 +91,7 @@ This example uses ...
 pg_ctl start -D .db/
 ```
 
-- Launch a shell within your virtual environment so you don't need `poetry run` ...
+- Launch a shell within your virtual environment **so you don't need `poetry run`** ...
 
 ```sh
 poetry shell
@@ -111,6 +105,12 @@ poetry shell
 <summary>Footnotes</summary>
 
 [^DJANGO]: To display a web page it asks a database for the data it needs to render files that the browser interprets (HTML, CSS & JavaScript) so it can display a user interface
+
+[^HONCHO]: I use `pipx` ...
+
+    ```sh
+    pipx install honcho
+    ```
 
 [^GITHUB]:
 
@@ -146,6 +146,12 @@ poetry shell
 
     ```sh
     nix profile install --impure --expr 'with import <nixpkgs> {}; pkgs.postgresql.withPackages   (p: [ p.timescaledb ])'
+    ```
+
+[^REDIS]: I use [`nix`](https://github.com/DeterminateSystems/nix-installer) ...
+
+    ```sh
+    nix profile install nixpkgs#redis
     ```
 
 [^SECRET_KEY]: Generate a `SECRET_KEY` ...

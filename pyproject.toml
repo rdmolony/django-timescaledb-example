@@ -12,6 +12,7 @@ Django = "^5.0"
 psycopg2-binary = "^2.9.9"
 djangorestframework = "^3.14.0"
 django-extensions = "^3.2.3"
+celery = {extras = ["redis"], version = "^5.3.6"}
 
 
 [build-system]
