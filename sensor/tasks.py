@@ -1,7 +1,7 @@
 from celery import shared_task
 
+from . import io
 
 @shared_task
-def echo():
-    with open("echo.txt", "w") as f:
-        f.write("Echo!")
+def import_to_db(file):
+    io.import_to_db(file)
