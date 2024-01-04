@@ -84,9 +84,9 @@ class File(models.Model):
 
 
 class Reading(models.Model):
-    timestamp = models.DateTimeField(blank=False, null=False)
+    timestamp = models.DateTimeField(blank=False, null=False, primary_key=True)
     sensor_name = models.TextField(blank=False, null=False)
-    reading = models.FloatField(blank=False, null=False)
+    reading = models.TextField(blank=False, null=False)
 
     class Meta:
         managed = False

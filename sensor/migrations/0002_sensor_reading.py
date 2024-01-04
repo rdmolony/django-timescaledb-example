@@ -27,7 +27,8 @@ class Migration(migrations.Migration):
             CREATE TABLE sensor_reading (
                 timestamp TIMESTAMP NOT NULL,
                 sensor_name TEXT NOT NULL,
-                reading FLOAT NOT NULL
+                reading TEXT NOT NULL,
+                primary key (timestamp, sensor_name)
             );
             SELECT create_hypertable('sensor_reading', 'timestamp');
             """,

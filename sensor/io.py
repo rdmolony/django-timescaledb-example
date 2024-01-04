@@ -2,10 +2,12 @@ from ast import literal_eval
 from collections import OrderedDict
 from datetime import datetime
 from datetime import timezone
+from itertools import islice
 import re
 import typing
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
 
 from .models import Reading
 
@@ -20,7 +22,8 @@ def unescape_backslash(s: str) -> str:
 
 
 def yield_readings(
-    lines: typing.Iterator[str],
+    lines: typing.Iterator[bytes],
+    encoding: str,
     delimiter: str,
     datetime_fieldnames: typing.Iterable[str],
     datetime_formats: typing.Iterable[str],
@@ -31,7 +34,7 @@ def yield_readings(
     https://en.wikipedia.org/wiki/Wide_and_narrow_data
     """
     split = lambda s: re.split(unescape_backslash(delimiter), s)
-    standardised_lines = (split(line) for line in lines)
+    standardised_lines = (split(line.decode(encoding)) for line in lines)
 
     fieldnames = None
 
@@ -63,85 +66,15 @@ def yield_readings(
             else:
                 for sensor, reading in readings.items():
                     yield {
-                        "timestamp": timestamp, "sensor": sensor, "reading": reading,
+                        "timestamp": timestamp,
+                        "sensor_name": sensor,
+                        "reading": reading,
                     }
-
-
-def insert(
-    rows: typing.Iterable[str],
-    columns: typing.Iterable[str],
-    table: str,
-    primary_key_columns: typing.Iterable[str],
-) -> None:
-
-    n_rows_to_insert = 10_000
-    _uuid = secrets.token_hex(8)
-    temp_table = f"{table}__temp__{_uuid}"
-
-    msg = (
-        "`primary_key_columns` must be defined"
-        + " in order to skip duplicate values on copying from a file!"
-    )
-    assert primary_key_columns, msg
-    primary_keys = ", ".join(primary_key_columns)
-
-    try:
-        with transaction.atomic():
-            with closing(connection.cursor()) as cursor:
-
-                cursor.execute(
-                    f"""
-                    create temp table {temp_table} (
-                        like {table}
-                    );
-                    """
-                )
-
-                cursor.copy_from(
-                    file=StringIteratorIO(row for row in rows),
-                    table=temp_table,
-                    columns=columns,
-                    sep=',',
-                    null="NULL"
-                )
-
-                cursor.execute(f"select count(*) from {temp_table}")
-                result = cursor.fetchone()
-                table_size = result[0]
-                assert table_size > 0, f"No readings found in file!"
-
-                for offset in range(0, table_size, n_rows_to_insert):
-                    percentage_complete = round(100 * offset / table_size, 2)
-                    cursor.execute(
-                        f"""
-                        -- {percentage_complete}%
-                        with chunk as (
-                            select *
-                            from {temp_table}
-                            limit {n_rows_to_insert}
-                            offset {offset}
-                        )
-                                insert into {table}
-                            select distinct on ({primary_keys}) *
-                                    from chunk;
-                        """
-                    )
-
-                cursor.execute(
-                    f"""
-                    drop table {temp_table}
-                    """
-                )
-
-    except Exception as e:
-        raise ValidationError(f"File parsing failed  | Error: {e})") from e
 
 
 def import_to_db(
     file_obj,
 ) -> None:
-
-    target_table = "sensor_reading_generic"
 
     if not file_obj.type:
         message = (
@@ -157,22 +90,31 @@ def import_to_db(
         # NOTE: ensure that the file datetime_format, encoding etc are valid!
         file_obj.clean()
 
-        with file_obj.file.open(encoding=file_obj.type.encoding) as f:
-            rows = yield_readings(
+        with file_obj.file.open(mode="rb") as f:
+            readings = yield_readings(
                 lines=f,
                 encoding=file_obj.type.encoding,
                 delimiter=file_obj.type.delimiter,
                 datetime_fieldnames=file_obj.type.datetime_fieldnames,
                 datetime_formats=file_obj.type.datetime_formats,
-                na_values=file_obj.type.na_values,
             )
 
-        sql.insert(
-            rows=rows,
-            columns=columns,
-            table=target_table,
-            primary_key_columns=["station_id", "sensor_id", "timestamp"],
+        reading_objs = (
+            Reading(
+                timestamp=r["timestamp"],
+                sensor_name=r["sensor_name"],
+                reading=r["reading"]
+            )
+            for r in readings
         )
+        batch_size = 1_000
+
+        with transaction.atomic():
+            while True:
+                batch = list(islice(reading_objs, batch_size))
+                if not batch:
+                    break
+                Reading.objects.bulk_create(batch, batch_size)
 
     except Exception as e:
         file_obj.parsed = None

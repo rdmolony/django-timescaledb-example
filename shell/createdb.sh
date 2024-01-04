@@ -21,7 +21,9 @@ psql -d db -c "
 
     -- Grant rights to create databases (useful for running tests)
     GRANT CONNECT ON DATABASE db TO django;
+    ALTER USER django CREATEDB;
 "
 
-# Install TimescaleDB
+# Install TimescaleDB in db & in template1 so automatically available in test_db
 psql -d db -c "CREATE EXTENSION timescaledb"
+psql -d template1 -c "CREATE EXTENSION timescaledb"
