@@ -1,0 +1,95 @@
+# serializer version: 1
+# name: test_yield_readings[lines0-\\s+-datetime_fieldnames0-datetime_formats0]
+  list([
+    dict({
+      'reading': '20.54',
+      'sensor': 'M(m/s)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '211.0',
+      'sensor': 'D(deg)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '1.22',
+      'sensor': 'SD(m/s)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '0.3',
+      'sensor': 'DSD(deg)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '21.00',
+      'sensor': 'Gust3s(m/s)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '11.9',
+      'sensor': 'T(C)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '992.8',
+      'sensor': 'PRE(hPa)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '0.15',
+      'sensor': 'RiNumber',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '0.18',
+      'sensor': 'VertM(m/s)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 0),
+    }),
+    dict({
+      'reading': '21.02',
+      'sensor': 'M(m/s)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+    dict({
+      'reading': '212.2',
+      'sensor': 'D(deg)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+    dict({
+      'reading': '2.55',
+      'sensor': 'SD(m/s)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+    dict({
+      'reading': '0.6',
+      'sensor': 'DSD(deg)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+    dict({
+      'reading': '21.35',
+      'sensor': 'Gust3s(m/s)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+    dict({
+      'reading': '11.8',
+      'sensor': 'T(C)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+    dict({
+      'reading': '992.7',
+      'sensor': 'PRE(hPa)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+    dict({
+      'reading': '0.29',
+      'sensor': 'RiNumber',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+    dict({
+      'reading': '-0.09',
+      'sensor': 'VertM(m/s)',
+      'timestamp': datetime.datetime(2015, 12, 22, 0, 10),
+    }),
+  ])
+# ---
