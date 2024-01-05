@@ -4,8 +4,12 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
+class Source(models.Model):
+    name = models.TextField()
+
+
 class FileType(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.TextField()
     na_values = ArrayField(
         base_field=models.CharField(max_length=10),
         default=["NaN"],
@@ -83,9 +87,11 @@ class File(models.Model):
     type = models.ForeignKey(FileType, on_delete=models.RESTRICT)
     parsed_at = models.DateTimeField(blank=False, null=False)
     parse_error = models.TextField(blank=True, null=True)
+    hash = models.TextField(blank=True, null=True)
 
 
 class Reading(models.Model):
+    file = models.ForeignKey(File, on_delete=models.RESTRICT)
     timestamp = models.DateTimeField(blank=False, null=False, primary_key=True)
     sensor_name = models.TextField(blank=False, null=False)
     reading = models.TextField(blank=False, null=False)

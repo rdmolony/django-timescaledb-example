@@ -19,6 +19,7 @@ class Migration(migrations.Migration):
                 ('uploaded_at', models.DateTimeField(auto_now_add=True)),
                 ('parsed_at', models.DateTimeField(null=True, blank=True)),
                 ('parse_error', models.TextField(null=True, blank=True)),
+                ('hash', models.TextField(null=True, blank=True)),
             ],
         ),
     ]
