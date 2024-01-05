@@ -1,5 +1,16 @@
-<form enctype="multipart/form-data" method="post">
-  {% csrf_token %}
-  {{ form }}
-  <input type="submit" value="Save"></input>
-</form>
+<div style="text-align: center">
+  <h1>Upload File</h1>
+  <form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div style="margin-bottom: 20px">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}
+          <span class="question-mark" title="{{ field.help_text }}">&#63;</span>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <input type="submit" value="Save"></input>
+  </form>
+</div>

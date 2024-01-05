@@ -10,11 +10,11 @@ class FileType(models.Model):
         base_field=models.CharField(max_length=10),
         default=["NaN"],
         help_text=textwrap.dedent(
-            r"""A list of strings to recognise as empty values. <br>
+            r"""A list of strings to recognise as empty values.
             
-            Default: ["NaN"] <br>
+            Default: ["NaN"]
 
-            Note: "" is also included by default <br>
+            Note: "" is also included by default
 
             Example: ["NAN", "-9999", "-9999.0"]
             """
@@ -23,9 +23,9 @@ class FileType(models.Model):
     delimiter = models.CharField(
         max_length=5,
         help_text=textwrap.dedent(
-            r"""The character used to separate fields in the file. <br>
+            r"""The character used to separate fields in the file.
             
-            Default: "," <br>
+            Default: ","
             
             Examples: "," or ";" or "\s+" for whitespace or "\t" for tabs
             """
@@ -36,24 +36,24 @@ class FileType(models.Model):
         base_field=models.CharField(max_length=50),
         default=["Tmstamp"],
         help_text=textwrap.dedent(
-            r"""A list of datetime field names. <br>
+            r"""A list of datetime field names.
             
-            Examples: <br>
+            Examples:
             
             1) Data has a single datetime field named "Tmstamp" which has values like
-            '2021-06-29 00:00:00.000':  ["Tmstamp"] <br>
+            '2021-06-29 00:00:00.000':  ["Tmstamp"]
 
             2) Data has two datetime fields named "Date" and "Time" which have values
-            like '01.01.1999' and '00:00' respectively: ["Date","Time"] <br>
+            like '01.01.1999' and '00:00' respectively: ["Date","Time"]
             """
         ),
     )
     encoding = models.CharField(
         max_length=25,
         help_text=textwrap.dedent(
-            r"""The encoding of the file. <br>
+            r"""The encoding of the file.
 
-            Default: "utf-8" <br>
+            Default: "utf-8"
 
             Examples: utf-8 or latin-1 or cp1252
             """
@@ -63,12 +63,12 @@ class FileType(models.Model):
     datetime_formats = ArrayField(
         base_field=models.CharField(max_length=25),
         help_text=textwrap.dedent(
-            r"""The datetime format of `datetime_columns`. <br>
+            r"""The datetime format of `datetime_columns`.
 
             See https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
             for format codes
 
-            Default: "%Y-%m-%d %H:%M:%S" <br>
+            Default: "%Y-%m-%d %H:%M:%S"
 
             Examples: "%Y-%m-%d %H:%M:%S" for "2021-03-01 00:00:00"
             """

@@ -10,6 +10,6 @@ app_name = "sensor"
 urlpatterns = [
     path('', views.index),
 
-    path('create-file-type/', views.upload_file, name="create-file-type"),
+    path('create-file-type/', views.create_file_type, name="create-file-type"),
     path('upload-file/', views.upload_file, name="upload-file"),
 ]

@@ -1,5 +1,30 @@
-<form enctype="multipart/form-data" method="post">
-  {% csrf_token %}
-  {{ form }}
-  <input type="submit" value="Save"></input>
-</form>
+<style>
+  .question-mark {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    background-color: #f2f2f2;
+    border-radius: 50%;
+    font-family: Arial, sans-serif;
+    cursor: help;
+  }
+</style>
+
+<div style="text-align: center">
+  <h1>Create File Type</h1>
+  <form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div style="margin-bottom: 20px">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}
+          <span class="question-mark" title="{{ field.help_text }}">&#63;</span>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <input type="submit" value="Save"></input>
+  </form>
+</div>
