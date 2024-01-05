@@ -17,6 +17,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('file', models.FileField(upload_to='readings/')),
                 ('uploaded_at', models.DateTimeField(auto_now_add=True)),
+                ('parsed_at', models.DateTimeField(null=True, blank=True)),
+                ('parse_error', models.TextField(null=True, blank=True)),
             ],
         ),
     ]

@@ -112,12 +112,12 @@ def import_to_db(
                 Reading.objects.bulk_create(batch, batch_size)
 
     except Exception as e:
-        file_obj.parsed = None
+        file_obj.parsed_at = None
         file_obj.parse_error = str(e)
         file_obj.save()
         raise e
 
     else:
-        file_obj.parsed = datetime.now(timezone.utc)
+        file_obj.parsed_at = datetime.now(timezone.utc)
         file_obj.parse_error = None
         file_obj.save()

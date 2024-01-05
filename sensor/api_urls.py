@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from .api import viewsets
-from .api import views
 
 
 app_name = "sensor"
@@ -35,5 +34,4 @@ urlpatterns = [
     path('', api_root, name="api-root"),
     path('file/', file_list, name='file-list'),
     path('file/<int:pk>/', file_detail, name='file-detail'),
-    path('echo/', views.echo, name="echo")
 ]

@@ -81,7 +81,7 @@ class File(models.Model):
     file = models.FileField(upload_to="readings/", blank=False, null=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     type = models.ForeignKey(FileType, on_delete=models.RESTRICT)
-    parsed = models.DateTimeField(blank=False, null=False)
+    parsed_at = models.DateTimeField(blank=False, null=False)
     parse_error = models.TextField(blank=True, null=True)
 
 
