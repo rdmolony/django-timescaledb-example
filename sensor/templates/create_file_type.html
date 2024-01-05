@@ -17,7 +17,7 @@
   <form enctype="multipart/form-data" method="post">
     {% csrf_token %}
     {% for field in form %}
-      <div style="margin-bottom: 20px">
+      <div style="margin-bottom: 10px">
         {{ field.label_tag }}
         {{ field }}
         {% if field.help_text %}
