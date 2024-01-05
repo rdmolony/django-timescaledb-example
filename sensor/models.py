@@ -90,3 +90,6 @@ class Reading(models.Model):
 
     class Meta:
         managed = False
+
+    def __str__(self) -> str:
+        return f"{self.sensor_name} @ {self.timestamp} = {self.reading}"

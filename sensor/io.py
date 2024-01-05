@@ -22,7 +22,7 @@ def unescape_backslash(s: str) -> str:
 
 
 def yield_readings(
-    lines: typing.Iterator[bytes],
+    lines: typing.Iterable[bytes],
     encoding: str,
     delimiter: str,
     datetime_fieldnames: typing.Iterable[str],
@@ -34,12 +34,11 @@ def yield_readings(
     https://en.wikipedia.org/wiki/Wide_and_narrow_data
     """
     split = lambda s: re.split(unescape_backslash(delimiter), s)
-    standardised_lines = (split(line.decode(encoding)) for line in lines)
+    standardised_lines = (split(line.decode(encoding)) for line in iter(lines))
 
     fieldnames = None
 
     for line in standardised_lines:
-
         if set(datetime_fieldnames).issubset(set(line)):
             fieldnames = line
             break
@@ -47,6 +46,7 @@ def yield_readings(
     if fieldnames == None:
         raise ValidationError(f"No `datetime_fieldnames` {datetime_fieldnames} found!")
 
+    # NOTE: `standardised_lines` is an iterator so prior loop used up the header lines
     for line in standardised_lines:
         fields = OrderedDict([(f, v) for f, v in zip(fieldnames, line)])
         readings = OrderedDict(
@@ -85,30 +85,26 @@ def import_to_db(
         )
         raise ValidationError(message)
 
-    try:
 
-        # NOTE: ensure that the file datetime_format, encoding etc are valid!
-        file_obj.clean()
-
-        with file_obj.file.open(mode="rb") as f:
-            readings = yield_readings(
-                lines=f,
-                encoding=file_obj.type.encoding,
-                delimiter=file_obj.type.delimiter,
-                datetime_fieldnames=file_obj.type.datetime_fieldnames,
-                datetime_formats=file_obj.type.datetime_formats,
-            )
-
+    with file_obj.file.open(mode="rb") as f:
         reading_objs = (
             Reading(
                 timestamp=r["timestamp"],
                 sensor_name=r["sensor_name"],
                 reading=r["reading"]
             )
-            for r in readings
+            for r in yield_readings(
+                lines=f,
+                encoding=file_obj.type.encoding,
+                delimiter=file_obj.type.delimiter,
+                datetime_fieldnames=file_obj.type.datetime_fieldnames,
+                datetime_formats=file_obj.type.datetime_formats,
+            )
         )
-        batch_size = 1_000
 
+    batch_size = 1_000
+    
+    try:
         with transaction.atomic():
             while True:
                 batch = list(islice(reading_objs, batch_size))
