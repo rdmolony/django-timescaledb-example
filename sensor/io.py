@@ -115,10 +115,10 @@ def import_to_db(
     except Exception as e:
         file_obj.parsed = None
         file_obj.parse_error = str(e)
-        file_obj.save()
-        raise e
 
     else:
         file_obj.parsed = datetime.now(timezone.utc)
         file_obj.parse_error = None
+    
+    finally:
         file_obj.save()
