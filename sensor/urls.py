@@ -8,7 +8,8 @@ app_name = "sensor"
 
 
 urlpatterns = [
-    path('', lambda request: redirect('sensor:upload-file')),
+    path('', views.index),
 
+    path('create-file-type/', views.upload_file, name="create-file-type"),
     path('upload-file/', views.upload_file, name="upload-file"),
 ]
