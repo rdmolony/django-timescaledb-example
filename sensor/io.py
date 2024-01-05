@@ -46,7 +46,7 @@ def yield_readings(
     if fieldnames == None:
         raise ValidationError(f"No `datetime_fieldnames` {datetime_fieldnames} found!")
 
-    # NOTE: `standardised_lines` is an iterator so prior loop used up the header lines
+    # NOTE: `standardised_lines` is an iterator so prior loop exhausts the header lines
     for line in standardised_lines:
         fields = OrderedDict([(f, v) for f, v in zip(fieldnames, line)])
         readings = OrderedDict(
