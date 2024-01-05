@@ -1,12 +1,8 @@
-from django.core.files.base import ContentFile
+from django.core.exceptions import ValidationError
 import pytest
 
-from sensor.io import import_to_db
-from sensor.io import unescape_backslash
-from sensor.io import yield_readings
-from sensor.models import File
-from sensor.models import FileType
-from sensor.models import Reading
+from sensor.io import validate_datetime_fieldnames_in_lines
+from sensor.io import yield_readings_in_narrow_format
 
 
 SOURCES = [
@@ -28,9 +24,34 @@ SOURCES = [
 ]
 
 
-@pytest.mark.parametrize("string,expected", [("\\t", "\t")])
-def test_unescape_backslash(string, expected):
-    assert unescape_backslash(string) == expected
+@pytest.mark.parametrize(
+    "lines,encoding,delimiter,datetime_fieldnames",
+    [
+        (
+            [
+                b"Lat=0  Lon=0  Hub-Height=160  Timezone=00.0  Terrain-Height=0.0",
+                b"Computed at 100 m resolution",
+                b" "
+            ],
+            "utf-8",
+            "\s+",
+            ["YYYYMMDD", "HHMM"],
+        )
+    ]
+)
+def test_validate_datetime_fieldnames_in_lines_on_invalid_lines(
+    lines,
+    encoding,
+    delimiter,
+    datetime_fieldnames,
+) -> None:
+    with pytest.raises(ValidationError):
+        validate_datetime_fieldnames_in_lines(
+            lines=lines,
+            encoding=encoding,
+            delimiter=delimiter,
+            datetime_fieldnames=datetime_fieldnames,
+        )
 
 
 @pytest.mark.parametrize(
@@ -46,7 +67,7 @@ def test_unescape_backslash(string, expected):
         for source in SOURCES
     ]
 )
-def test_yield_readings(
+def test_yield_readings_in_narrow_format(
     lines,
     encoding,
     delimiter,
@@ -56,7 +77,7 @@ def test_yield_readings(
 ) -> None:
     output = [
         reading 
-        for reading in yield_readings(
+        for reading in yield_readings_in_narrow_format(
             lines=lines,
             encoding=encoding,
             delimiter=delimiter,
@@ -64,50 +85,4 @@ def test_yield_readings(
             datetime_formats=datetime_formats,
         )
     ]
-    assert output == snapshot
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "lines,encoding,delimiter,datetime_fieldnames,datetime_formats,na_values",
-    [
-        (
-            source["lines"],
-            source["encoding"],
-            source["delimiter"],
-            source["datetime_fieldnames"],
-            source["datetime_formats"],
-            source["na_values"],
-        )
-        for source in SOURCES
-    ]
-)
-def test_import_to_db(
-    lines,
-    encoding,
-    delimiter,
-    datetime_fieldnames,
-    datetime_formats,
-    na_values,
-    snapshot,
-) -> None:
-
-    file_type_obj = FileType.objects.create(
-        delimiter=delimiter,
-        datetime_fieldnames=datetime_fieldnames,
-        datetime_formats=datetime_formats,
-        na_values=na_values,
-        encoding=encoding,
-    )
-    file = ContentFile(
-        b"\n".join(l for l in lines), name="sensor-readings.txt"
-    )
-    file_obj = File(
-        file=file,
-        type=file_type_obj,
-    )
-
-    import_to_db(file_obj)
-
-    output = Reading.objects.all()
     assert output == snapshot
