@@ -6,6 +6,8 @@ This example uses ...
 
 - `Postgres` with extension `TimescaleDB` as a database[^TIMESCALEDB]
 
+> [!TIP]
+> If you have any trouble getting setup,  feel free to ask a question at [django-timescaledb-example/discussions](https://github.com/rdmolony/django-timescaledb-example/discussions)
 
 ---
 
@@ -21,7 +23,7 @@ This example uses ...
 - Install [`Redis`](https://redis.io/)[^REDIS]
 
 > [!IMPORTANT]  
-> `Windows` - try [`tporadowski/redis`](https://github.com/tporadowski/redis) or [`zkteco-home/redis-windows`](https://github.com/zkteco-home/redis-windows).  `Celery` is used alongside `Redis` as a task queue & may not run on `Windows`,  so you may have to adapt `**/tasks.py` for [`Bogdanp/dramatiq`](https://github.com/Bogdanp/dramatiq)
+> For `Windows` try [`tporadowski/redis`](https://github.com/tporadowski/redis) or [`zkteco-home/redis-windows`](https://github.com/zkteco-home/redis-windows).  `Celery` is used alongside `Redis` as a task queue & may not run in which case you'll have to adapt `**/tasks.py` for [`Bogdanp/dramatiq`](https://github.com/Bogdanp/dramatiq)
 
 - Install this project's `Python` dependencies via ...
 
@@ -44,14 +46,11 @@ This example uses ...
     sh shell/createdb.sh
     ```
 
+> [!IMPORTANT]  
+> For `Windows` adapt `shell/createdb.sh` for `Command Prompt` or `PowerShell`
+
 > [!WARNING]  
 > [**Create a new role with a password**](https://www.postgresql.org/docs/current/database-roles.html) if you go on to do something with this database
-
-> [!IMPORTANT]  
-> `Windows` - adapt `shell/createdb.sh` for `Command Prompt` or `PowerShell`
-
-> [!TIP]
-> If you have any trouble getting setup,  feel free to ask a question at [django-timescaledb-example/discussions](https://github.com/rdmolony/django-timescaledb-example/discussions)
 
 
 ---
