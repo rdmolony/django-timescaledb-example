@@ -18,7 +18,7 @@ def unescape_backslash(s: str) -> str:
 
     Source: https://stackoverflow.com/questions/1885181/how-to-un-escape-a-backslash-escaped-string
     """
-    return literal_eval(f'"{s}"')
+    return s.encode('raw_unicode_escape').decode('unicode_escape')
 
 
 def yield_readings(
