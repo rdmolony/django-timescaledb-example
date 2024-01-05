@@ -27,3 +27,6 @@ psql -d db -c "
 # Install TimescaleDB in db & in template1 so automatically available in test_db
 psql -d db -c "CREATE EXTENSION timescaledb"
 psql -d template1 -c "CREATE EXTENSION timescaledb"
+
+# Roll out Django **/migrations
+poetry run python manage.py migrate
