@@ -64,7 +64,7 @@ This example uses ...
     honcho start
     ```
 
-> [!NOTE]  
+> [!TIP]  
 > Go to [`http://localhost:8000`](http://localhost:8000) & you should see a running web application
 
 
