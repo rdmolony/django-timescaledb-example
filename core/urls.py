@@ -21,7 +21,7 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('', lambda request: redirect('sensor/')),
+    path('', lambda request: redirect('sensor:root')),
 
     path('admin/', admin.site.urls),
     path('api/', include('core.api_urls')),

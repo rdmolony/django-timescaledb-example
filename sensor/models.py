@@ -13,10 +13,12 @@ from .io import yield_readings_in_narrow_format
 
 
 class Source(models.Model):
+
     name = models.TextField()
 
 
 class FileType(models.Model):
+
     name = models.TextField()
     na_values = ArrayField(
         base_field=models.CharField(max_length=10),
@@ -90,10 +92,11 @@ class FileType(models.Model):
 
 
 class File(models.Model):
+
     file = models.FileField(upload_to="readings/", blank=False, null=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     type = models.ForeignKey(FileType, on_delete=models.RESTRICT)
-    parsed_at = models.DateTimeField(blank=False, null=False)
+    parsed_at = models.DateTimeField(blank=True, null=True)
     parse_error = models.TextField(blank=True, null=True)
     hash = models.TextField(blank=True, null=True)
 
@@ -120,6 +123,7 @@ class File(models.Model):
 
 
         with self.file.open(mode="rb") as f:
+    
             reading_objs = (
                 Reading(
                     timestamp=r["timestamp"],
@@ -135,29 +139,31 @@ class File(models.Model):
                 )
             )
 
-        batch_size = 1_000
+            batch_size = 1_000
         
-        try:
-            with transaction.atomic():
-                while True:
-                    batch = list(islice(reading_objs, batch_size))
-                    if not batch:
-                        break
-                    Reading.objects.bulk_create(batch, batch_size)
+            try:
+                with transaction.atomic():
+                    while True:
+                        batch = list(islice(reading_objs, batch_size))
+                        if not batch:
+                            break
+                        Reading.objects.bulk_create(batch, batch_size)
 
-        except Exception as e:
-            self.parsed_at = None
-            self.parse_error = str(e)
-            self.save()
-            raise e
+            except Exception as e:
+                breakpoint()
+                self.parsed_at = None
+                self.parse_error = str(e)
+                self.save()
+                raise e
 
-        else:
-            self.parsed_at = datetime.now(timezone.utc)
-            self.parse_error = None
-            self.save()
+            else:
+                self.parsed_at = datetime.now(timezone.utc)
+                self.parse_error = None
+                self.save()
 
 
 class Reading(models.Model):
+
     file = models.ForeignKey(File, on_delete=models.RESTRICT)
     timestamp = models.DateTimeField(blank=False, null=False, primary_key=True)
     sensor_name = models.TextField(blank=False, null=False)

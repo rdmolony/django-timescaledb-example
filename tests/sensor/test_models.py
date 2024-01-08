@@ -59,8 +59,9 @@ def test_import_to_db(
     )
     file = ContentFile(b"\n".join(l for l in lines), name="sensor-readings.txt")
     file_obj = File(file=file, type=file_type_obj)
+    file_obj.save()
 
-    file_obj.import_to_db(file_obj)
+    file_obj.import_to_db()
 
     output = Reading.objects.all()
     assert output == snapshot
