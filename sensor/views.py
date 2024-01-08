@@ -23,6 +23,7 @@ def upload_file(request):
         form = FileForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            form.instance.import_to_db()
             return HttpResponse("File upload was successful")
         else:
             return HttpResponse(f"File type creation failed: {form.errors}")

@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from unittest.mock import patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 import pytest
@@ -78,10 +79,7 @@ class TestUploadFile():
             name="sensor-readings.txt", content=b"I am invalid!",)
         url = reverse("api:sensor:file-list")
         
-        response = client.post(
-            url,
-            {"file": invalid_file, "type": file_type.name}
-        )
+        response = client.post(url,{"file": invalid_file, "type": file_type.name})
 
         assert response.status_code == HTTPStatus.BAD_REQUEST
         assert response.content == snapshot
@@ -103,10 +101,35 @@ class TestUploadFile():
         )
         url = reverse("api:sensor:file-list")
         
-        response = client.post(
-            url,
-            {"file": file, "type": ""}
-        )
+        response = client.post(url, {"file": file, "type": ""})
 
         assert response.status_code == HTTPStatus.BAD_REQUEST
         assert response.content == snapshot
+
+    def test_import_to_db_is_called(
+        self,
+        client,
+        lines,
+        encoding,
+        delimiter,
+        datetime_fieldnames,
+        datetime_formats,
+        na_values,
+    ):
+        file_type = FileType.objects.create(
+            name="type",
+            encoding=encoding,
+            delimiter=delimiter,
+            datetime_fieldnames=datetime_fieldnames,
+            datetime_formats=datetime_formats,
+            na_values=na_values,
+        )
+        file = SimpleUploadedFile(
+            name="sensor-readings.txt", content=b"\n".join(l for l in lines),
+        )
+        url = reverse("sensor:upload-file")
+        
+        with patch("sensor.models.File.import_to_db") as importer:
+            client.post(url, {"file": file, "type": file_type.id})
+            breakpoint()
+            assert importer.called

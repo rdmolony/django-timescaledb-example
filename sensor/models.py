@@ -101,6 +101,9 @@ class File(models.Model):
     parse_error = models.TextField(blank=True, null=True)
     hash = models.TextField(blank=True, null=True)
 
+    def __str__(self) -> str:
+        return f"{self.file}"
+
     def clean(self):
 
         if self.type is None:
