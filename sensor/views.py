@@ -12,7 +12,7 @@ def create_file_type(request):
             form.save()
             return HttpResponse("File type was created")
         else:
-            return HttpResponse("File type creation failed")
+            return HttpResponse(f"File type creation failed: {form.errors}")
     else:
         form = FileTypeForm()
     return render(request, "create_file_type.html", {"form": form})
@@ -25,7 +25,7 @@ def upload_file(request):
             form.save()
             return HttpResponse("File upload was successful")
         else:
-            return HttpResponse("File upload failed")
+            return HttpResponse(f"File type creation failed: {form.errors}")
     else:
         form = FileForm()
     return render(request, "upload_file.html", {"form": form})

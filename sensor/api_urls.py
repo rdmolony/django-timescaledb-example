@@ -26,7 +26,6 @@ file_detail = viewsets.FileViewSet.as_view({
 def api_root(request, format=None):
     return Response({
         'files': reverse('api:sensor:file-list', request=request, format=format),
-        'echo': reverse('api:sensor:echo', request=request, format=format),
     })
 
 

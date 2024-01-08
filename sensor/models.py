@@ -7,6 +7,7 @@ from itertools import islice
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db import transaction
+from django.core.exceptions import ValidationError
 
 from .io import validate_datetime_fieldnames_in_lines
 from .io import yield_readings_in_narrow_format
@@ -101,31 +102,30 @@ class File(models.Model):
     hash = models.TextField(blank=True, null=True)
 
     def clean(self):
+
+        if self.type is None:
+            raise ValidationError("File type must be specified!")
+
+        # NOTE: This file is automatically closed upon saving a model instance
+        # ... each time a file is read the file pointer must be reset to enable rereads
+        f = self.file.open(mode="rb")
+
         # NOTE: automatically called by Django Forms & DRF Serializer Validate Method
-        with self.file.open(mode="rb") as f:
-            validate_datetime_fieldnames_in_lines(
-                lines=f,
-                encoding=self.type.encoding,
-                delimiter=self.type.delimiter,
-                datetime_fieldnames=self.type.datetime_fieldnames,
-            )
+        validate_datetime_fieldnames_in_lines(
+            lines=f,
+            encoding=self.type.encoding,
+            delimiter=self.type.delimiter,
+            datetime_fieldnames=self.type.datetime_fieldnames,
+        )
+        self.file.seek(0)
 
     def import_to_db(self):
-
-        if not self.type:
-            message = (
-                "Please define this file's type"
-                + " before attempting to parse it"
-                + " so the file's `encoding`, `delimiter`, `datetime_fieldnames`"
-                + " etc are defined!"
-            )
-            raise ValueError(message)
-
 
         with self.file.open(mode="rb") as f:
     
             reading_objs = (
                 Reading(
+                    file=self,
                     timestamp=r["timestamp"],
                     sensor_name=r["sensor_name"],
                     reading=r["reading"]
@@ -150,7 +150,6 @@ class File(models.Model):
                         Reading.objects.bulk_create(batch, batch_size)
 
             except Exception as e:
-                breakpoint()
                 self.parsed_at = None
                 self.parse_error = str(e)
                 self.save()

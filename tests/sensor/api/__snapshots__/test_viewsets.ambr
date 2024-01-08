@@ -1,0 +1,7 @@
+# serializer version: 1
+# name: TestUploadFile.test_cannot_upload_a_missing_file_type[lines0-utf-8-\\s+-datetime_fieldnames0-datetime_formats0-na_values0]
+  b'{"type":["This field may not be null."]}'
+# ---
+# name: TestUploadFile.test_cannot_upload_an_invalid_file[lines0-utf-8-\\s+-datetime_fieldnames0-datetime_formats0-na_values0]
+  b'{"non_field_errors":["No `datetime_fieldnames` [\'YYYYMMDD\', \'HHMM\'] found!"]}'
+# ---

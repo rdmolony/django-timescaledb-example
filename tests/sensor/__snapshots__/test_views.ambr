@@ -1,0 +1,4 @@
+# serializer version: 1
+# name: TestUploadFile.test_cannot_upload_an_invalid_file[lines0-utf-8-\\s+-datetime_fieldnames0-datetime_formats0-na_values0]
+  b'File type creation failed: <ul class="errorlist"><li>__all__<ul class="errorlist nonfield"><li>No `datetime_fieldnames` [&#x27;YYYYMMDD&#x27;, &#x27;HHMM&#x27;] found!</li></ul></li></ul>'
+# ---

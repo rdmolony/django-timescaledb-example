@@ -28,9 +28,10 @@ def validate_datetime_fieldnames_in_lines(
     datetime_fieldnames: typing.Iterable[str],
 ) -> None:
 
+    split_lines = yield_split_lines(lines=lines, encoding=encoding, delimiter=delimiter)
     fieldnames = None
 
-    for line in yield_split_lines(lines=lines, encoding=encoding, delimiter=delimiter):
+    for line in split_lines:
         if set(datetime_fieldnames).issubset(set(line)):
             fieldnames = line
             break
