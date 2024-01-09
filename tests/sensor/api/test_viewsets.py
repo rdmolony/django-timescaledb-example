@@ -131,5 +131,4 @@ class TestUploadFile():
         
         with patch("sensor.models.File.import_to_db") as importer:
             client.post(url, {"file": file, "type": file_type.id})
-            breakpoint()
             assert importer.called
