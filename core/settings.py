@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # 3rd Party
     'rest_framework',
     'django_extensions',
+    'import_export',
 
     # Custom
     'sensor'
@@ -143,12 +144,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = 'site/static/'
 
 # Media files (uploaded by user)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-MEDIA_ROOT = 'media/'
+MEDIA_ROOT = 'site/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

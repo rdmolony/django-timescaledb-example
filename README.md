@@ -52,6 +52,12 @@ This example uses ...
 > [!WARNING]  
 > [**Create a new role with a password**](https://www.postgresql.org/docs/current/database-roles.html) if you go on to do something with this database
 
+- Create a superuser to access the `admin` site ...
+
+    ```sh
+    poetry run python manage.py createsuperuser 
+    ```
+
 
 ---
 

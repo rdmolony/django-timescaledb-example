@@ -17,7 +17,8 @@ tests/.coverage*
 build/
 tests/report/
 tests/screenshots/
+
 .env
 .db/
-media/
+site/
 *.rdb
