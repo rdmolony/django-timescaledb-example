@@ -1,4 +1,7 @@
 # serializer version: 1
-# name: test_import_to_db[lines0-utf-8-\\s+-datetime_fieldnames0-datetime_formats0-na_values0]
+# name: test_import_directly_to_db[lines0]
+  <QuerySet [<Reading: M(m/s) @ 2015-12-22 00:00:00 = 20.54>, <Reading: D(deg) @ 2015-12-22 00:00:00 = 211.0>]>
+# ---
+# name: test_parse_and_import_to_db[lines0-utf-8-\\s+-datetime_fieldnames0-datetime_formats0-na_values0]
   <QuerySet [<Reading: M(m/s) @ 2015-12-22 00:00:00 = 20.54>, <Reading: D(deg) @ 2015-12-22 00:00:00 = 211.0>, <Reading: SD(m/s) @ 2015-12-22 00:00:00 = 1.22>, <Reading: DSD(deg) @ 2015-12-22 00:00:00 = 0.3>, <Reading: Gust3s(m/s) @ 2015-12-22 00:00:00 = 21.00>, <Reading: T(C) @ 2015-12-22 00:00:00 = 11.9>, <Reading: PRE(hPa) @ 2015-12-22 00:00:00 = 992.8>, <Reading: RiNumber @ 2015-12-22 00:00:00 = 0.15>, <Reading: VertM(m/s) @ 2015-12-22 00:00:00 = 0.18>, <Reading:  @ 2015-12-22 00:00:00 = >, <Reading: M(m/s) @ 2015-12-22 00:10:00 = 21.02>, <Reading: D(deg) @ 2015-12-22 00:10:00 = 212.2>, <Reading: SD(m/s) @ 2015-12-22 00:10:00 = 2.55>, <Reading: DSD(deg) @ 2015-12-22 00:10:00 = 0.6>, <Reading: Gust3s(m/s) @ 2015-12-22 00:10:00 = 21.35>, <Reading: T(C) @ 2015-12-22 00:10:00 = 11.8>, <Reading: PRE(hPa) @ 2015-12-22 00:10:00 = 992.7>, <Reading: RiNumber @ 2015-12-22 00:10:00 = 0.29>, <Reading: VertM(m/s) @ 2015-12-22 00:10:00 = -0.09>]>
 # ---

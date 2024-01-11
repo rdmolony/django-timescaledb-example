@@ -1,3 +1,5 @@
+
+import json
 import textwrap
 
 from datetime import datetime
@@ -122,7 +124,31 @@ class File(models.Model):
         )
         self.file.seek(0)
 
-    def import_to_db(self):
+    def import_directly_to_db(self):
+
+        # NOTE: assume uploaded file is JSON
+        with self.file.open(mode="rb") as f:
+
+            reading_objs = (
+                Reading(
+                    file=self,
+                    timestamp=r["timestamp"],
+                    sensor_name=r["sensor_name"],
+                    reading=r["reading"]
+                )
+                for r in json.load(f)
+            )
+
+            batch_size = 1_000
+
+            with transaction.atomic():
+                while True:
+                    batch = list(islice(reading_objs, batch_size))
+                    if not batch:
+                        break
+                    Reading.objects.bulk_create(batch, batch_size)
+
+    def parse_and_import_to_db(self):
 
         with self.file.open(mode="rb") as f:
     
@@ -162,6 +188,10 @@ class File(models.Model):
                 self.parsed_at = datetime.now(timezone.utc)
                 self.parse_error = None
                 self.save()
+
+    def import_to_db(self) -> None:
+
+        self.import_directly()
 
 
 class Reading(models.Model):

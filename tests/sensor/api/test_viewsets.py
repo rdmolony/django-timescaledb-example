@@ -106,7 +106,7 @@ class TestUploadFile():
         assert response.status_code == HTTPStatus.BAD_REQUEST
         assert response.content == snapshot
 
-    def test_import_to_db_is_called(
+    def test_parse_and_import_to_db_is_called(
         self,
         client,
         lines,
@@ -129,6 +129,6 @@ class TestUploadFile():
         )
         url = reverse("sensor:upload-file")
         
-        with patch("sensor.models.File.import_to_db") as importer:
+        with patch("sensor.models.File.parse_and_import_to_db") as importer:
             client.post(url, {"file": file, "type": file_type.id})
             assert importer.called
