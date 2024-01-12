@@ -104,6 +104,6 @@ class TestUploadFile():
         )
         url = reverse("sensor:upload-file")
         
-        with patch("sensor.models.File.parse_and_import_to_db") as importer:
+        with patch("sensor.models.File.import_to_db") as importer:
             client.post(url,{"file": file, "type": file_type.id})
             assert importer.called

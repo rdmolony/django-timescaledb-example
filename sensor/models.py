@@ -1,6 +1,7 @@
 
 import json
 import textwrap
+from pathlib import Path
 
 from datetime import datetime
 from datetime import timezone
@@ -124,7 +125,7 @@ class File(models.Model):
         )
         self.file.seek(0)
 
-    def import_directly_to_db(self):
+    def import_json(self):
 
         # NOTE: assume uploaded file is JSON
         with self.file.open(mode="rb") as f:
@@ -148,7 +149,7 @@ class File(models.Model):
                         break
                     Reading.objects.bulk_create(batch, batch_size)
 
-    def parse_and_import_to_db(self):
+    def parse_and_import(self):
 
         with self.file.open(mode="rb") as f:
     
@@ -191,7 +192,10 @@ class File(models.Model):
 
     def import_to_db(self) -> None:
 
-        self.import_directly()
+        if Path(self.file.path).suffix == ".json":
+            self.import_json()
+        else:
+            self.parse_and_import()
 
 
 class Reading(models.Model):

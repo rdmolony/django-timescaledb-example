@@ -38,7 +38,7 @@ def test_import_directly_to_db(
     file_obj = File(file=file, type=file_type_obj)
     file_obj.save()
 
-    file_obj.import_directly_to_db()
+    file_obj.import_json()
 
     output = Reading.objects.all()
     assert output == snapshot
@@ -81,7 +81,7 @@ def test_parse_and_import_to_db(
     file_obj = File(file=file, type=file_type_obj)
     file_obj.save()
 
-    file_obj.parse_and_import_to_db()
+    file_obj.parse_and_import()
 
     output = Reading.objects.all()
     assert output == snapshot

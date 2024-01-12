@@ -10,4 +10,4 @@ class FileViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        instance.parse_and_import_to_db()
+        instance.import_to_db()
