@@ -4,7 +4,9 @@ This example uses ...
 
 - `Django` as the “glue” between web browsers and a database[^DJANGO]
 
-- `Postgres` with extension `TimescaleDB` as a database[^TIMESCALEDB]
+- `Postgres` with extension `TimescaleDB` as the web application database[^TIMESCALEDB]
+
+- `Celery` as a task queue powered by `Redis`
 
 > [!TIP]
 > If you have any trouble getting setup,  feel free to ask a question at [django-timescaledb-example/discussions](https://github.com/rdmolony/django-timescaledb-example/discussions)
